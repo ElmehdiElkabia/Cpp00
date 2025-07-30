@@ -1,5 +1,6 @@
 #include "Account.hpp"
 #include <iostream>
+#include <ctime>
 
 int Account::_nbAccounts = {0};
 int Account::_totalAmount = {0};
@@ -27,6 +28,8 @@ int Account::getNbWithdrawals(void)
 }
 void Account::displayAccountsInfos(void)
 {
+	_displayTimestamp();
+	
 	std::cout << "accounts:" << getNbAccounts() << ";total:" << getTotalAmount() << ";deposits:" << getNbDeposits() << ";withdrawals:" << getNbWithdrawals() << std::endl;
 }
 
@@ -38,16 +41,22 @@ Account::Account(int initial_deposit)
 	this->_nbDeposits = 0;
 	this->_nbWithdrawals = 0;
 
+	_displayTimestamp();
+
 	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";created" << std::endl;
 }
 
 Account::~Account(void)
 {
+	_displayTimestamp();
+
 	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";closed" << std::endl;
 }
 
 void Account::makeDeposit(int deposit)
 {
+	_displayTimestamp();
+
 	std::cout << "index:" << _accountIndex << ":p_amount:" << _amount;
 
 	_amount += deposit;
@@ -60,6 +69,8 @@ void Account::makeDeposit(int deposit)
 
 bool Account::makeWithdrawal(int withdrawal)
 {
+	_displayTimestamp();
+
 	std::cout << "index:" << _accountIndex << ";p_amount:" << _amount;
 
 	if (withdrawal > _amount)
@@ -83,5 +94,18 @@ int Account::checkAmount(void) const
 
 void Account::displayStatus(void) const
 {
+	_displayTimestamp();
+
 	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";deposits:" << _nbDeposits << ";withdrawals:" << _nbWithdrawals << std::endl;
+}
+
+void Account::_displayTimestamp( void )
+{
+	std::time_t	now = std::time(nullptr);
+	std::tm* datetime = std::localtime(&now);
+
+	char date[50];
+	std::strftime(date, sizeof(date),"[%Y%m%d_%H%M%S]" ,datetime);
+
+	std::cout << date << " ";
 }
